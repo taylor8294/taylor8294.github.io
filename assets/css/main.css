@@ -2227,7 +2227,7 @@ input, select, textarea {
 		display: flex;
 		cursor: default;
 		list-style: none;
-		margin-left: -1em;
+		margin: 2em 0 0 -1em;
 		padding-left: 0;
 	}
 
@@ -2631,6 +2631,19 @@ input, select, textarea {
 		#footer .icons a {
 			color: rgba(255, 255, 255, 0.4);
 		}
+
+		/* Font Awesome missing CodeWars fix */
+		#footer .icons .codewars-icon {
+			border-bottom-style: none
+		}
+		#footer .icons .codewars-icon svg{
+			width: 23px;
+			vertical-align: text-bottom;
+			fill: rgba(255, 255, 255, 0.4);
+		}
+			#footer .icons .codewars-icon:hover svg{
+				fill: #49bf9d;
+			}
 
 	#footer .copyright {
 		color: rgba(255, 255, 255, 0.4);
