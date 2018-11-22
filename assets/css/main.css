@@ -2638,6 +2638,7 @@ input, select, textarea {
 		}
 		#footer .icons .codewars-icon svg{
 			width: 23px;
+            margin-bottom: 2px;
 			vertical-align: text-bottom;
 			fill: rgba(255, 255, 255, 0.4);
 		}
