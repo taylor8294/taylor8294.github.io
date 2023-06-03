@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ireland Roadtrip | Taylrr</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    #map {
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script>
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+      key: "AIzaSyBJW7CyeRgTAJbTsMtZwBQPP5wBgBnJ_DI",
+      v: "weekly",
+      // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
+      // Add other bootstrap parameters as needed, using camel case.
+    });
+  </script>
+  <script>
+    let map;
+    async function initMap() {
+      const { Map } = await google.maps.importLibrary("maps");
+      const { PinElement, AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+      let openInfoWindow = null;
+      map = new Map(document.getElementById("map"), {
+        center: { lat: 53.7798, lng: -7.3055 },
+        zoom: 8,
+        mapId: "DEMO_MAP_ID",
+      });
+      map.fitBounds({west:-9.97708574059, south:51.6693012559, east:-6.03298539878, north:55.1316222195})
+      
+      function addMarker(location, opts) {
+        if(!(typeof opts == 'object')) opts = {label:opts}
+        let marker
+        if(opts.color || ['scale','borderColor','background','glyphColor', 'glyph'].some(k => k in opts)){
+          const pinBackground = new PinElement({
+            scale: opts.scale ? opts.scale : 1,
+            borderColor: opts.borderColor ? opts.borderColor : (opts.color == 'blue' ? '#477bbd' : (opts.color == 'grey' ? '#999999' : undefined)),
+            background: opts.background ? opts.background : (opts.color == 'blue' ? '#4c93f7' : (opts.color == 'grey' ? '#cccccc' : undefined)),
+            glyphColor: opts.glyphColor ? opts.glyphColor : undefined,
+            glyph: opts.glyph ? opts.glyph : (opts.label ? opts.label : undefined),
+          });
+          marker = new AdvancedMarkerElement({
+            position: location,
+            title: opts.title,
+            content: pinBackground.element,
+            map,
+          });
+        } else {
+          marker = new google.maps.Marker({
+            position: location,
+            label: opts.label,
+            title: opts.title,
+            map: map,
+          });
+        }
+        /*if(opts.title){
+          let q = encodeURIComponent(opts.title).replace(/%20/g, "+");
+          marker.addListener("click", () => {
+            window.open('https://www.google.com/search?q='+q, '_blank').focus()
+          });
+        }*/
+        if(opts.html){
+          const infowindow = new google.maps.InfoWindow({
+            content: opts.html,
+          });
+          marker.addListener(marker instanceof AdvancedMarkerElement ? "gmp-click" : "click", () => {
+            if(openInfoWindow) try { openInfoWindow.close() } catch(e){}
+            openInfoWindow = infowindow
+            infowindow.open(marker.get ? marker.get("map") : marker.map, marker);
+          });
+        }
+      }
+
+      // DAY 1
+      addMarker({lat:54.681250, lng:-5.884144}, {
+        title:"Jordanstown Loughshore Caravan Park",
+        html:"Shore Rd, Newtownabbey, County Antrim, BT37 0PY",
+        label:"1",
+        color: 'blue'
+      }),
+      addMarker({lat:54.597242, lng:-5.930299}, {
+        title:"Belfast",
+        html:" ",
+        label:"1",
+      }),
+      // DAY 2
+      addMarker({lat:54.580274, lng:-5.715465}, {
+        title:"Scrabo Tower",
+        html:"125 foot turreted tower at 540 feet above sea level",
+        label:"2",
+      }),
+      addMarker({lat:54.371877, lng:-5.603065}, {
+        title:"Audley's Castle",
+        html:"16th-century castle used as a filming location in HBO's epic series Game of Thrones",
+        label:"2",
+      }),
+      addMarker({lat:54.37296, lng:-5.578739}, {
+        title:"Castle Ward",
+        html:"Unique 18th-century mansion used as a filming location in HBO's epic series Game of Thrones",
+        label:"2",
+      }),
+      addMarker({lat:54.315483, lng:-5.839570}, {
+        title:"Seaforde Tropical Butterfly House",
+        html:"Walled garden with viewing tower and hedge maze, plus exotic butterflies and tearoom",
+        label:"2",
+      }),
+      addMarker({lat:54.262, lng:-5.844881}, {
+        title:"Dandrum Castle",
+        html:"12th century castle used as a filming location in HBO's epic series Game of Thrones, the gatekeeper has a display of swords and other period weapons, shields and armour",
+        label:"2",
+      }),
+      addMarker({lat:54.258479, lng:-5.953258}, {
+        title:"Castlewellan Forest Park",
+        html:"Peace Maze, one of the world's largest permanent hedge mazes, representing the path to a peaceful future for Northern Ireland",
+        label:"2",
+      }),
+      addMarker({lat:54.238406, lng:-5.989744}, {
+        title:"Drumena Stone Fort",
+        html:"40 metre by 32 metre cashel with T-shaped souterrain",
+        label:"2",
+      }),
+      addMarker({lat:54.219600, lng:-5.946130}, {
+        title:"Tollymore Forest Park",
+        html:"Shimna River flows through this park where it is crossed by 16 bridges, the earliest dating to 1726",
+        label:"2",
+      }),
+      addMarker({lat:54.128402, lng:-5.999100}, {
+        title:"Silent Valley Mountain Park",
+        html:"View of the Mourne Mountains over large reservoir",
+        label:"2",
+      }),
+      addMarker({lat:54.108607, lng:-6.423090}, {
+        title:"Ring of Gullion",
+        html:"Area of Outstanding Natural Beauty centrered on Slieve Gullion, the highest peak in County Armagh",
+        label:"2",
+      }),
+      addMarker({lat:53.715916, lng:-6.347021}, {
+        title:"St. Laurence Gate",
+        html:"Impressive 13th century barbican",
+        label:"2",
+      }),
+      addMarker({lat:53.694722, lng:-6.475531}, {
+        title:"Newgrange",
+        html:"Constructed over 5,000 years ago, prehistoric monument older than the Great Pyramid of Giza in Egypt",
+        label:"2",
+      }),
+      addMarker({lat:53.694861, lng:-6.446579}, {
+        title:"Br&uacute; na B&oacute;inne",
+        html:"Meaning the 'palace' or the 'mansion' of the Boyne, one of the world's most important prehistoric landscapes",
+        label:"2",
+      }),
+      addMarker({lat:53.578811, lng:-6.611650}, {
+        title:"Hill of Tara",
+        html:"Stone age complex",
+        label:"2",
+      }),
+      addMarker({lat:53.554327, lng:-6.789752}, {
+        title:"Trim Castle",
+        html:"Norman castle on the bank of the River Boyne",
+        label:"2",
+      }),
+      //DAY 3
+      addMarker({lat:53.304289, lng:-6.414617}, {
+        title:"Camac Valley Caravan Park",
+        html:"Naas Road, Clondalkin Dublin-22, D22 DR60",
+        label:"2+3",
+        color: 'blue'
+      }),
+      addMarker({lat:53.345543, lng:-6.275779}, {
+        title:"Dublin",
+        html:"Many an attraction",
+        label:"3",
+      }),
+      // DAY 4
+      addMarker({lat:53.184436, lng:-6.186901}, {
+        title:"Powerscourt Estate",
+        html:"Japanese garden and stone tower",
+        label:"4",
+      }),
+      addMarker({lat:53.145976, lng:-6.211020}, {
+        title:"Powerscourt Waterfall",
+        html:"Ireland’s highest waterfall at 121m",
+        label:"4",
+      }),
+      addMarker({lat:53.104800, lng:-6.268255}, {
+        title:"Lough Tay",
+        html:"Scenic lake",
+        label:"4",
+      }),
+      addMarker({lat:53.06421, lng:-6.336885}, {
+        title:"Glenmacnass Waterfall",
+        html:"Waterfall constituting the beginning of the Glenmacnass valley",
+        label:"4",
+      }),
+      addMarker({lat:53.010542, lng:-6.327283}, {
+        title:"Glendalough Monastic City",
+        html:"Ruins of the famous settlement established by St. Kevin in the 6th century.",
+        label:"4",
+      }),
+      addMarker({lat:52.91589, lng:-6.306635}, {
+        title:"Greenan Maze",
+        html:"Mazes and farm museum",
+        label:"4",
+      }),
+      addMarker({lat:52.802528, lng:-6.662285}, {
+        title:"Rath Gael Stone Fort",
+        html:"Large circular Bronze Age site",
+        label:"4",
+      }),
+      addMarker({lat:52.767877, lng:-6.620287}, {
+        title:"Aghowle Church",
+        html:"Medieval church and High Cross",
+        label:"4",
+      }),
+      addMarker({lat:52.590735, lng:-6.499112}, {
+        title:"Ferns Castle",
+        html:"13th Century castle",
+        label:"4",
+      }),
+      addMarker({lat:52.508168, lng:-6.40697}, {
+        title:"Tulach a' tSolais Monument",
+        html:"Unique memorial at the location of the first battle of the 1798 uprising against British rule",
+        label:"4",
+      }),
+      addMarker({lat:52.293231, lng:-6.502495}, {
+        title:"Johnstown Castle",
+        html:"12th Century castle castle with woodland and walled gardens, glasshouses, and lakes covering 4 acres",
+        label:"4",
+      }),
+      addMarker({lat:52.35988, lng:-6.80485}, {
+        title:"Browne Clayton Monument",
+        html:"A replica of Pompey’s Column in Egypt, this 1841 monument is 94 feet tall and links Wexford to the 1801 Napoleonic wars with Britain",
+        label:"4",
+      }),
+      addMarker({lat:52.23690, lng:-6.83810}, {
+        title:"Tintern Abbey",
+        html:"A Cistercian abbey, founded c.1200 and named after Tintern in Wales",
+        label:"4",
+      }),
+      addMarker({lat:52.28239, lng:-6.95613}, {
+        title:"Dunbrody Abbey",
+        html:"The largest monastery in Ireland, built in the 12th Century",
+        label:"4",
+      }),
+      addMarker({lat:52.321285, lng:-6.933604}, {
+        title:"JFK Memorial Park",
+        html:"623 acres dedicated to the memory of U.S. President John F. Kennedy",
+        label:"4",
+      }),
+      addMarker({lat:52.510839, lng:-7.157500}, {
+        title:"Jerpoint Abbey",
+        html:"Ruined Cistercian abbey, founded in the second half of the 12th century",
+        label:"4",
+      }),
+      addMarker({lat:52.552775, lng:-7.088478}, {
+        title:"Kilfane Glen and Waterfall",
+        html:"Pristine example of a romantic era garden dating from the 1790s",
+        label:"4",
+      }),
+      addMarker({lat:52.260586, lng:-7.105389}, {
+        title:"The Viking Triangle",
+        html:"Over a 1000 years of history shows itself in this area of Waterford",
+        label:'',
+        color: 'grey'
+      }),
+      addMarker({lat:52.640019, lng:-7.229005}, {
+        title:"Tree Grove Camp Site",
+        html:"Danville, Kilkenny, R95 K642",
+        label:"4",
+        color: 'blue'
+      }),
+      // DAY 5
+      addMarker({lat:52.653296, lng:-7.253873}, {
+        title:"Kilkenny",
+        html:"Kilkenny Castle, St. Canice's Cathedral & Round Tower, The Black Abbey, St Mary's Cathedral, St. John the Evangelist Church, Butter Slip, Old Jail and Courthouse, St John's Priory",
+        label:"5",
+      }),
+      addMarker({lat:52.520075, lng:-7.890433}, {
+        title:"Rock of Cashel",
+        html:"Limestone outcrop with Medieval edifices, including a 12th-century tower and a Gothic cathedral",
+        label:"5",
+      }),
+      addMarker({lat:52.478925, lng:-7.983118}, {
+        title:"Athassel Priory",
+        html:"Dating back to the 12th century, this is largest medieval priory in Ireland with grounds stretching over four acres",
+        label:"5",
+      }),
+      addMarker({lat:52.374538, lng:-7.927192}, {
+        title:"Cahir Castle",
+        html:"12th-century river island fortress, one of the largest in Ireland, with a keep and defensive towers",
+        label:"5",
+      }),
+      addMarker({lat:52.357254, lng:-7.923531}, {
+        title:"The Swiss Cottage",
+        html:"Ornamental chalet-like thatched building built c.1810",
+        label:"5",
+      }),
+      addMarker({lat:52.305758, lng:-8.108708}, {
+        title:"Mitchelstown Cave",
+        html:"Limestone caverns, containing spectacular rock formations and prehistoric fossils",
+        label:"5",
+      }),
+      addMarker({lat:52.258781, lng:-7.937767}, {
+        title:"The Vee",
+        html:"Scenic mountain drive, the R668",
+        label:"5",
+      }),
+      addMarker({lat:52.22359, lng:-7.541307}, {
+        title:"Mahon Falls",
+        html:"80m waterfall nestled in the Comeragh Mountains",
+        label:"5",
+      }),
+      addMarker({lat:52.147778, lng:-7.958889}, {
+        title:"Ballysaggartmore Towers",
+        html:"Ornate entrance lodges (follies) built around 1830 surrounded by forested land",
+        label:"5",
+      }),
+      addMarker({lat:52.140517, lng:-7.933042}, {
+        title:"Lismore Castle",
+        html:"Gothic style stately home, built 1753",
+        label:"5",
+      }),
+      addMarker({lat:51.850161, lng:-8.295006}, {
+        title:"Titanic Experience Cobh",
+        html:"Audio visual tour retracing the steps of the 123 passengers who boarded Titanic from here on April 11th 1912",
+        label:"5",
+      }),
+      addMarker({lat:51.947473, lng:-8.547201}, {
+        title:"Blarney Caravan and Camping Park",
+        html:"Stoneview, Blarney, Cork, T23 R85r",
+        label:"5",
+        color: 'blue'
+      }),
+      addMarker({lat:51.929072, lng:-8.570951}, {
+        title:"Blarney Castle",
+        html:"Home of the Blarney Stone, built nearly six hundred years ago",
+        label:"5",
+      }),
+      // DAY 6
+      addMarker({lat:51.696827, lng:-8.49896}, {
+        title:"Charles Fort",
+        html:"Constructed c.1680 on the site of an earlier coastal fortification, Charles Fort is a classic example of a star-shaped fort with five bastions",
+        label:"6",
+      }),
+      addMarker({lat:51.564561, lng:-9.087028}, {
+        title:"Drombeg Stone Circle",
+        html:"Also known as The Druid's Altar, this Recumbent stone circle is one of the most visited megalithic sites in Ireland and is protected under the National Monuments Act",
+        label:"6",
+      }),
+      addMarker({lat:51.451155, lng:-9.816421}, {
+        title:"Mizen Head",
+        html:"Rising 700 feet above the ocean, the southernmost point in Ireland offers spectacular views of the coastline and marinelife from this iconic bridge",
+        label:"6",
+      }),
+      addMarker({lat:51.598974, lng:-9.623019}, {
+        title:"Air India Disaster Memorial",
+        html:"A memorial garden and sundial that honour the memory of the victims of the 1985 Air India disaster",
+        label:"",
+        color:'grey'
+      }),
+      addMarker({lat:51.677339, lng:-9.465078}, {
+        title:"Bantry House",
+        html:"Stately 18th-century mansion set in formal gardens on the southern shore of Bantry Bay",
+        label:"6",
+      }),
+      addMarker({lat:51.744302, lng:-9.372034}, {
+        title:"Kealkil Stone Circle",
+        html:"Impressive megalithic monument, tallest stone stands over four metres high",
+        label:"6",
+      }),
+      addMarker({lat:51.754152, lng:-9.379343}, {
+        title:"Carriganass Castle",
+        html:"16th-century riverside tower house",
+        label:"6",
+      }),
+      addMarker({lat:51.838979, lng:-9.318686}, {
+        title:"Gougane Barra Park",
+        html:"Scenic countryside park and lake with many walking and nature trails",
+        label:"6",
+      }),
+      addMarker({lat:51.719319, lng:-9.753563}, {
+        title:"Healy Pass",
+        html:"Scenic R574 winds through a desolate, otherworldly landscape",
+        label:"6",
+      }),
+      addMarker({lat:51.608208, lng:-10.157621}, {
+        title:"Dursey Island",
+        html:"Reached by Ireland's only cable car, and one of the very few cable cars that traverses seawater in all of Europe, this island offers walks atop the sea-battered cliffs",
+        label:"6",
+      }),
+      addMarker({lat:52.042997, lng:-9.499556}, {
+        title:"Killarney Flesk Caravan & Camping Park",
+        html:"Poulnamuck, Muckross, Killarney, V93 D6pn",
+        label:"",
+        color:"grey"
+      }),
+      addMarker({lat:52.074825, lng:-9.620142}, {
+        title:"Dunloe View Hostel",
+        html:"Gortacollopa, Fossa, V93 Kr91",
+        label:"6",
+        color: 'blue'
+      }),
+      //DAY 7
+      addMarker({lat:52.041285, lng:-9.531349}, {
+        title:"Ross Castle",
+        html:"15th-century tower house and keep on the edge of Lough Leane",
+        label:"7",
+      }),
+      addMarker({lat:52.01818, lng:-9.503901}, {
+        title:"Muckross House",
+        html:"Magnificent Victorian mansion, one of Ireland's leading stately homes",
+        label:"7",
+      }),
+      addMarker({lat:52.003358, lng:-9.505505}, {
+        title:"Torc Waterfall",
+        html:"20 metre high falls along the Torc Mountain Walk",
+        label:"7",
+      }),
+      addMarker({lat:51.967329, lng:-9.592782}, {
+        title:"Ladies View",
+        html:"A stunning scenic view point along the Ring of Kerry route, the Lakes of Killarney can be seen from this point",
+        label:"7",
+      }),
+      addMarker({lat:52.026523, lng:-9.695790}, {
+        title:"Carrauntoohil",
+        html:"Highest peak in Ireland",
+        label:"7",
+      }),
+      addMarker({lat:52.007102, lng:-9.642084}, {
+        title:"Gap of Dunloe",
+        html:"Narrow mountain pass between MacGillycuddy's Reeks and Purple Mountain",
+        label:"7",
+      }),
+      addMarker({lat:51.886515, lng:-10.36695}, {
+        title:"Skellig Rock Trips",
+        html:"Precipitously rocky island where Christian monks settled in the 7th century, awarded UNESCO World Heritage status in 1996",
+        label:"7",
+      }),
+      addMarker({lat:52.106182, lng:-9.781786}, {
+        title:"Puck Fair Monument",
+        html:"Puck Fair ('poc' being the Irish for a male goat) is reputed to be one of Ireland's oldest fairs which takes place annually for three days in August",
+        label:"7",
+      }),
+      addMarker({lat:52.08457, lng:-9.692543}, {
+        title:"Ballymallis Castle",
+        html:"16th century 4 storey tower house featuring bartizans and spiral stairs",
+        label:"7",
+      }),
+      addMarker({lat:52.098202, lng:-10.455021}, {
+        title:"Slea Head Cross",
+        html:"A large white crucifix against the rocks marks the headland at this oceanside scenic pull-off",
+        label:"7",
+      }),
+      addMarker({lat:52.102228, lng:-10.429879}, {
+        title:"Upside-Down Bridge",
+        html:"This turn on the R559 where the stream flows over the road is affectionately called the ''upside-down-bridge''",
+        label:"7",
+      }),
+      addMarker({lat:52.100864, lng:-10.420462}, {
+        title:"Beehive Huts",
+        html:"Built like stone igloos, these shelters were built into the hillside by early religious settlements",
+        label:"7",
+      }),
+      addMarker({lat:52.104983, lng:-10.409484}, {
+        title:"Dunbeg Fort",
+        html:"In use from the 800 BC to 900 AD, this dramatic cliff top promontory hangs over the bay below",
+        label:"7",
+      }),
+      addMarker({lat:52.167523, lng:-10.387622}, {
+        title:"Riasc Monastic Settlemen",
+        html:"Impressive ruins of a 6th-century monastery and important carved stone",
+        label:"7",
+      }),
+      addMarker({lat:52.173366, lng:-10.353244}, {
+        title:"Gallarus Oratory",
+        html:"Ireland’s best preserved and most iconic early Chrisitan church, over a thousand years old",
+        label:"7",
+      }),
+      addMarker({lat:52.184777, lng:-10.336237}, {
+        title:"Kilmalkedar Church",
+        html:"The remains of this Irish Romanesque church are surrounded by an old cemetery filled with ancient carved stones and a striking view",
+        label:"7",
+      }),
+      addMarker({lat:52.239280, lng:-10.205787}, {
+        title:"Mount Brandon",
+        html:"Highest Irish peak outside the Macgillycuddy's Reeks",
+        label:"7",
+      }),
+      addMarker({lat:52.268354, lng:-9.703055}, {
+        title:"St. John's Church",
+        html:"Completed in 1861, this church is a site not to be missed with its 200 foot high spire and a stained glass window which ranks amongst the finest of its style in Western Europe",
+        label:"7",
+      }),
+      addMarker({lat:52.269041, lng:-9.701515}, {
+        title:"Castle Hostel",
+        html:"27 Upper Castle Street, Tralee, ",
+        label:"7",
+        color: 'blue'
+      }),
+      addMarker({lat:52.256705, lng:-9.737172}, {
+        title:"Blennerville Windmill",
+        html:"Built by Sir Blennerhassett in 1800, whom the village of Blennerville is named after, this tower mill is the tallest of its kind in Europe at 21.3 metres high",
+        label:"7",
+      }),
+      // DAY 8
+      addMarker({lat:52.442655, lng:-9.650209}, {
+        title:"Rattoo Round Tower",
+        html:"Reaching a height of 28m and a base circumference of 15m, this is the only complete round tower in Kerry and possibly dates from the late 10th or early 11th century",
+        label:"8",
+      }),
+      addMarker({lat:52.444476, lng:-9.486942}, {
+        title:"Listowel Castle",
+        html:"Front of 15th century castle, standing almost to the original height of 15.3 metres",
+        label:"8",
+      }),
+      addMarker({lat:52.563622, lng:-8.792539}, {
+        title:"Adare Village",
+        html:"One of Ireland’s prettiest villages, it is known for its beautiful traditional thatched cottages",
+        label:"8",
+      }),
+      addMarker({lat:52.523082, lng:-8.520868}, {
+        title:"Lough Gur",
+        html:"Magical and mysterious place, rich in folklore and a wealth of archaeology and history dating back to Stone Age times",
+        label:"8",
+      }),
+      addMarker({lat:52.662571, lng:-8.617557}, {
+        title:"St. John's Cathedral",
+        html:"Completed in 1882, cathedral with 308 foot tower",
+        label:"8",
+      }),
+      addMarker({lat:52.668392, lng:-8.623345}, {
+        title:"St. Mary's Cathedral",
+        html:"Impressive place of worship for nearly 900 years",
+        label:"8",
+      }),
+      addMarker({lat:52.669694, lng:-8.625595}, {
+        title:"King John's Castle",
+        html:"13th-century castle on the banks of the River Shannon",
+        label:"8",
+      }),
+      addMarker({lat:52.699562, lng:-8.811922}, {
+        title:"Bunratty Castle & Folk Park",
+        html:"Castle built in 1425, includes an enchanting village displaying Ireland as it would have been over a century ago",
+        label:"8",
+      }),
+      addMarker({lat:52.811499, lng:-8.792995}, {
+        title:"Craggaunowen",
+        html:"Pre-historic Park with 16th century castle",
+        label:"8",
+      }),
+      addMarker({lat:52.819245, lng:-8.863459}, {
+        title:"Quin Abbey",
+        html:"Ruined Franciscan abbey built in the Gothic style in the early 15th century",
+        label:"8",
+      }),
+      addMarker({lat:52.680822, lng:-9.6717}, {
+        title:"Kilkee Cliff Walk",
+        html:"Fabulous walk with spectacular views atop steep cliffs",
+        label:"8",
+      }),
+      addMarker({lat:52.971749, lng:-9.428882}, {
+        title:"Cliffs of Moher",
+        html:"8km stretch of cliffs reaching height of 214m, with vista embracing Aran Islands plus viewing tower",
+        label:"8",
+      }),
+      addMarker({lat:53.041368, lng:-9.344993}, {
+        title:"Doolin Cave",
+        html:"Home to the Great Stalactite; suspended from the ceiling like a chandelier at 7.3 metres, it is the longest free-hanging stalactite in the Northern Hemisphere",
+        label:"8",
+      }),
+      addMarker({lat:53.010394, lng:-9.030695}, {
+        title:"Father Ted Parochial House",
+        html:"The house that hosted Father Ted in the Channel 4 sitcom running from 1995 to 1998",
+        label:"8",
+      }),
+      addMarker({lat:52.987589, lng:-9.140264}, {
+        title:"Leamaneh Castle",
+        html:"Ruined 15th-century tower house with 17th-century mansion",
+        label:"8",
+      }),
+      addMarker({lat:53.040900, lng:-9.139646}, {
+        title:"Caherconnell Stone Fort",
+        html:"Medieval, exceptionally well-preserved stone ringfort",
+        label:"8",
+      }),
+      addMarker({lat:53.048674, lng:-9.140105}, {
+        title:"Poulnabrone dolmen",
+        html:"Meaning \"hole of the mill stones\", this portal tomb dates back to between 4200 BC and 2900 BC",
+        label:"8",
+      }),
+      addMarker({lat:53.089128, lng:-9.143668}, {
+        title:"Aillwee Cave",
+        html:"One of the oldest caves in Ireland, appears in Father Ted as \"The Very Dark Caves\"",
+        label:"8",
+      }),
+      addMarker({lat:53.126531, lng:-9.054376}, {
+        title:"Corcomroe Abbey",
+        html:"Early 13th-century Cistercian monastery",
+        label:"8",
+      }),
+      addMarker({lat:53.142237, lng:-8.92589}, {
+        title:"Dunguaire Castle",
+        html:"16th-century bay-side fortress",
+        label:"8",
+      }),
+      addMarker({lat:53.276178, lng:-9.053505}, {
+        title:"Salmon Weir Hostel",
+        html:"3 St. Vincent Avenue, Woodquay, Galway, ",
+        label:"8",
+        color: 'blue'
+      }),
+      addMarker({lat:53.421158, lng:-9.329406}, {
+        title:"Oughterard Holiday Hostel & Angling Center",
+        html:"Station Road, Oughterard, H91 Y5N6",
+        label:"",
+        color:"grey"
+      }),
+      // DAY 9
+      addMarker({lat:53.296547, lng:-9.073492}, {
+        title:"Menlough Castle",
+        html:"Beside the River Corrib, this 17th century tower house was home to the Blake family until an accidental fire in 1910, it has been a ruin ever since",
+        label:"9",
+      }),
+      addMarker({lat:53.42694, lng:-9.422788}, {
+        title:"The Quiet Man Bridge",
+        html:"Quaint bridge used as a setting in the 1952 film 'The Quiet Man' starring John Wayne and Maureen O'Hara",
+        label:"9",
+      }),
+      addMarker({lat:53.493688, lng:-10.053456}, {
+        title:"Clifden Castle",
+        html:"This ruin of a Gothic Revival style manor house, built c.1818, lies along the scenic Sky Road route",
+        label:"9",
+      }),
+      addMarker({lat:53.561724, lng:-9.889913}, {
+        title:"Kylemore Abbey",
+        html:"Benedictine monastery featuring Victorian Walled Gardens, Gothic Church, woodland, and lakeshore walks",
+        label:"9",
+      }),
+      addMarker({lat:53.534763, lng:-9.284451}, {
+        title:"Ashford Castle",
+        html:"13th-century castle overlooking Lough Corrib on 350 acres of parkland",
+        label:"9",
+      }),
+      addMarker({lat:53.619648, lng:-9.670404}, {
+        title:"Ashleigh Falls",
+        html:"Small scenic falls, known for salmon jumping in late summer",
+        label:"9",
+      }),
+      addMarker({lat:53.666245, lng:-9.781217}, {
+        title:"Doolough Famine Memorial",
+        html:"Commemorating those that died walking here in 1849 trying to reach aid, and those that suffer similarly today",
+        label:"9",
+      }),
+      addMarker({lat:53.78017, lng:-9.63971}, {
+        title:"Great Famine National Monument",
+        html:"Ireland’s largest bronze sculpture hauntingly depecits a 'coffin ship'",
+        label:"9",
+      }),
+      addMarker({lat:53.759609, lng:-9.659225}, {
+        title:"Croagh Patrick",
+        html:"Soaring majestically above the surrounding countryside, this conical shaped mountain offers magnificent views of Clew Bay and the surrounding south Mayo countryside",
+        label:"9",
+      }),
+      addMarker({lat:53.896133,lng:-9.62705},{
+        title:"Rockfleet Castle",
+        html:"Mid-16th century tower house, 18m tall, it is open to the public year round",
+        label:"9",
+      }),
+      addMarker({lat:53.9677, lng:-10.193188}, {
+        title:"Keem Bay",
+        html:"Picturesque horseshoe bay with a popular Blue Flag beach",
+        label:"9",
+      }),
+      addMarker({lat:54.322881, lng:-9.345813}, {
+        title:"Downpatrick Head",
+        html:"Seastack known as 'D&uacute;n Briste' (The Broken Fort)",
+        label:"9",
+      }),
+      addMarker({lat:54.202178, lng:-9.177065}, {
+        title:"Moyne Abbey",
+        html:"One of the most impressive ecclesiastical ruins in Mayo",
+        label:"9",
+      }),
+      addMarker({lat:54.058011, lng:-8.453460}, {
+        title:"Caves of Keash",
+        html:"17 caves in a limestone cliff that feature promenantly in local legends",
+        label:"9",
+      }),
+      addMarker({lat:54.095082, lng:-8.348346}, {
+        title:"Heapstown Cairn",
+        html:"200 feet across and 20 feet tall, has not been excavated but likely covers a passage tomb",
+        label:"9",
+      }),
+      addMarker({lat:54.061588, lng:-8.298809}, {
+        title:"Arrowrock Lodge",
+        html:"Ballynary, Riverstown, Boyle, F52 X720 ",
+        label:"9",
+        color: 'blue'
+      }),
+      // DAY 10
+      addMarker({lat:54.258553, lng:-8.574049}, {
+        title:"Knocknarea",
+        html:"Striking 1000 foot high limestone hill",
+        label:"10",
+      }),
+      addMarker({lat:54.243731, lng:-8.445768}, {
+        title:"Tobernalt Holy Well",
+        html:"Natural spring well in tranquil garden",
+        label:"10",
+      }),
+      addMarker({lat:54.264721, lng:-8.33421}, {
+        title:"Parke's Castle",
+        html:"17th century castle on the shores of Lough Gill",
+        label:"10",
+      }),
+      addMarker({lat:54.340507, lng:-8.367878}, {
+        title:"Glencar Waterfall",
+        html:"Dramatic fall descending from 50ft rocky headland into a deep pool",
+        label:"10",
+      }),
+      addMarker({lat:54.347385, lng:-8.393045}, {
+        title:"Sruth in Aghaidh An Aird",
+        html:"Name meaning 'stream against the height', also known as The Devils Chimney, this 120m high waterfall is spectacular after periods of heavy rainfall",
+        label:"10",
+      }),
+      addMarker({lat:54.361612, lng:-8.501983}, {
+        title:"Benbulbin Loop Walk",
+        html:"Stunning views of Ireland’s most distinctive mountain",
+        label:"10",
+      }),
+      addMarker({lat:54.490424, lng:-8.271809}, {
+        title:"Fairy Bridges",
+        html:"Seastacks just offshore and a 'bridge' eroded in the rock to see crashing waves below",
+        label:"10",
+      }),
+      addMarker({lat:54.724228, lng:-8.480956}, {
+        title:"Glengesh Pass",
+        html:"Wild and picturesque route meandering through sloping mountainous terrain",
+        label:"10",
+      }),
+      addMarker({lat:54.758611, lng:-8.513680}, {
+        title:"Assaranca Waterfall",
+        html:"Spectacular waterfall cascades down the hillside by the sea",
+        label:"10",
+      }),
+      addMarker({lat:54.765927, lng:-8.540060}, {
+        title:"Maghera Caves",
+        html:"14 caves in total, one of which is said to emerge in Glencolmcille 10 miles away",
+        label:"10",
+      }),
+      addMarker({lat:55.019327, lng:-8.111652}, {
+        title:"Old Church of Dunlewey",
+        html:"Lying in Poisoned Glen, built around 1850",
+        label:"10",
+      }),
+      addMarker({lat:55.034456, lng:-8.113322}, {
+        title:"Mount Errigal",
+        html:"751m mountain",
+        label:"10",
+      }),
+      addMarker({lat:55.036291, lng:-7.968689}, {
+        title:"Glenveagh Castle",
+        html:"Large castellated mansion house built in the Scottish Baronial style in 1870",
+        label:"10",
+      }),
+      addMarker({lat:55.257406, lng:-7.620436}, {
+        title:"Great Pollet Sea Arch",
+        html:"Spectacular sea arch",
+        label:"10",
+      }),
+      addMarker({lat:55.023774, lng:-7.427803}, {
+        title:"Grianan of Aileach",
+        html:"Ring Fort atop a hill 250m above sea level, offers breathtaking views",
+        label:"10",
+      }),
+      addMarker({lat:55.000572, lng:-7.325862}, {
+        title:"Derry City Independent Hostel",
+        html:"12 Princes Street, BT48 7EY",
+        label:"10",
+        color: 'blue'
+      }),
+      // DAY 11
+      addMarker({lat:55.267591, lng:-7.436080}, {
+        title:"Glenevin Waterfall",
+        html:"Spectacular 40ft fall",
+        label:"11",
+      }),
+      addMarker({lat:54.995741, lng:-7.326775}, {
+        title:"Free Derry Corner",
+        html:"Historical landmark commemorating Free Derry, a self-declared autonomous nationalist area of Derry that existed between 1969 and 1972",
+        label:"11",
+      }),
+      addMarker({lat:55.210565, lng:-6.579543}, {
+        title:"Dunluce Castle",
+        html:"Ruined medieval castle",
+        label:"11",
+      }),
+      addMarker({lat:55.240174, lng:-6.511099}, {
+        title:"Giant's Causeway",
+        html:"Famous basalt rock formations",
+        label:"11",
+      }),
+      addMarker({lat:55.239566, lng:-6.332498}, {
+        title:"Carrick-a-Rede",
+        html:"Famous rope bridge spanning 20 metres, 30 metres above the rocks below",
+        label:"11",
+      }),
+      addMarker({lat:55.134645, lng:-6.381098}, {
+        title:"The Dark Hedges",
+        html:"Famous avenue of beech trees, one of the most photographed natural phenomena in NI",
+        label:"11",
+      }),
+      addMarker({lat:55.019424, lng:-6.123922}, {
+        title:"Glenariff Forest Park",
+        html:"One of the nine Antrim Glens, Glenariff Forest Park covers over 1000 hectares with paths passing beautiful waterfalls",
+        label:"11",
+      }),
+      addMarker({lat:54.993876, lng:-5.993331}, {
+        title:"Cranny Falls",
+        html:"Pleasant walk along an old limestone railway past a disused quarry and ending at impressive falls",
+        label:"11",
+      }),
+      addMarker({lat:54.880879, lng:-6.096704}, {
+        title:"Slemish Mountain",
+        html:"Legendary first known Irish home of Saint Patrick, actually the central core of an extinct volcano, rises about 437 metres above the surrounding plain",
+        label:"11",
+      }),
+      addMarker({lat:54.724038, lng:-6.208920}, {
+        title:"The Steeple",
+        html:"Round tower built around the 10th century, 28 metres tall",
+        label:"",
+        color:"grey"
+      }),
+      addMarker({lat:54.801006, lng:-5.832996}, {
+        title:"Gleno Waterfall",
+        html:"Small glen with one of the most picturesque waterfalls in NI",
+        label:"11",
+      }),
+      addMarker({lat:54.766594, lng:-5.689605}, {
+        title:"Gobbins Cliff Path",
+        html:"Dramatic coastal walk with small tunnel and bridges",
+        label:"11",
+      }),
+      addMarker({lat:54.713466, lng:-5.806275}, {
+        title:"Carrickfergus Castle",
+        html:"Norman castle",
+        label:"11",
+      }),
+      addMarker({lat:54.586147, lng:-5.929028}, {
+        title:"Global Village",
+        html:"87 University St, BT7 1HP",
+        label:"11",
+      })
+      /*, addMarker({lat:54.597242, lng:-5.930299}, {
+        title:'Belfast',
+        html:"Full circle",
+        label:"12",
+      })*/
+
+      fetch('paths.json').then(r => r.json()).then(o => {
+        o.forEach(coords => {
+          const path = new google.maps.Polyline({
+            path: coords,
+            geodesic: true,
+            strokeColor: "#FF0000",
+            strokeOpacity: 1.0,
+            strokeWeight: 2,
+          });
+          path.setMap(map);
+        });
+      })
+    }
+    initMap();
+  </script>
+</body>
+</html>
